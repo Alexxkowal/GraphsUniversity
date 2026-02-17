@@ -9,6 +9,8 @@ public class DirectedGraph<T> extends AbstractGraph<T>{
 
     @Override
     public void addEdge(Node<T> firstNode, Node<T> secondNode, int weight) {
+        addNode(firstNode);
+        addNode(secondNode);
         edges.get(firstNode).add(EdgeFactory.createDirectedEdge(firstNode, secondNode, weight));
     }
 
