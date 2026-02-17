@@ -2,10 +2,7 @@ package com.graphs.models;
 
 import com.graphs.models.edge.Edge;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class AbstractGraph<T> implements Graph<T>{
     protected Map<Node<T>, List<Edge<T>>> edges;
@@ -40,4 +37,20 @@ public abstract class AbstractGraph<T> implements Graph<T>{
 
     @Override
     public  abstract void removeEdge(Node<T> firstNode, Node<T> secondNode);
+
+    public Map<Node<T>, List<Edge<T>>> getEdges() {
+        return edges;
+    }
+
+    public boolean isWeighted() {
+        return isWeighted;
+    }
+
+    public List<Edge<T>> getEdges(Node<T> node){
+        return edges.get(node);
+    };
+
+    public Set<Node<T>> getNodes(){
+        return edges.keySet();
+    };
 }
