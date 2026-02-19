@@ -3,11 +3,26 @@ package com.graphs.models;
 import com.graphs.models.edge.Edge;
 import com.graphs.models.edge.EdgeFactory;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class UndirectedGraph<T> extends AbstractGraph<T> {
     public UndirectedGraph(boolean isWeighted) {
         super(isWeighted);
+    }
+
+    public UndirectedGraph(){
+        super();
+    }
+
+    public UndirectedGraph(String path){
+        super(path);
+    }
+
+    public UndirectedGraph(Graph<T> graph){
+        super(graph);
     }
 
     @Override
@@ -27,5 +42,19 @@ public class UndirectedGraph<T> extends AbstractGraph<T> {
         } else {
             throw new IllegalArgumentException("Nodes doesn't exists");
         }
+    }
+
+    @Override
+    public List<Edge<T>> getAllEdges() {
+        Set<Edge<T>> edgeSet = new HashSet<>();
+        for (List<Edge<T>> listEdges : edges.values()) {
+            for (var edge : listEdges) {
+                if (edge.getStartNode().hashCode() > edge.getEndNode().hashCode()) {
+                    continue;
+                }
+                edgeSet.add(edge);
+            }
+        }
+        return new ArrayList<>(edgeSet);
     }
 }
