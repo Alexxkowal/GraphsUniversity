@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class Node<T> {
-    private final List<Node<? extends  T>> neighbors;
+    private final List<Node<? extends T>> neighbors;
     private T content;
 
     public Node() {
@@ -17,7 +17,7 @@ public class Node<T> {
         neighbors = new ArrayList<>();
     }
 
-    public Node (Node<? extends T> other){
+    public Node(Node<? extends T> other) {
         this.content = other.getContent();
         this.neighbors = new ArrayList<>(other.getNeighbors());
     }
@@ -35,20 +35,21 @@ public class Node<T> {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return this.content.toString();
     }
 
     @Override
-    public boolean equals(Object o){
+    public boolean equals(Object o) {
+        if (o == null) return false;
         if (this == o) return true;
         if (this.getClass() != o.getClass()) return false;
-        Node<?> object = (Node <?>) o;
+        Node<?> object = (Node<?>) o;
         return Objects.equals(this.content, object.getContent());
     }
 
     @Override
-    public int hashCode(){
+    public int hashCode() {
         return Objects.hash(this.content);
     }
 }

@@ -7,6 +7,18 @@ public class DirectedGraph<T> extends AbstractGraph<T>{
         super(isWeighted);
     }
 
+    public DirectedGraph(){
+        super();
+    }
+
+    public DirectedGraph(String path){
+        super(path);
+    }
+
+    public DirectedGraph(Graph<T> graph){
+        super(graph);
+    }
+
     @Override
     public void addEdge(Node<T> firstNode, Node<T> secondNode, int weight) {
         addNode(firstNode);

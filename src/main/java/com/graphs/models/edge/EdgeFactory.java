@@ -18,4 +18,7 @@ public class EdgeFactory<T>{
     public static <T> List<Edge<T>> createUndirectedEdge(Node<T> node1, Node<T> node2){
         return List.of(new Edge<>(node1, node2, 1), new Edge<>(node2, node1, 1));
     }
+    public static <T> Edge<T> copy(Edge<T> original){
+        return  new Edge<>(original.getStartNode(), original.getEndNode(), original.getWeight());
+    }
 }
