@@ -18,10 +18,13 @@ public interface Graph<T> {
 
     boolean isWeighted();
 
-    List<Edge<T>> getEdges(Node<T> node);
+    Set<Edge<T>> getEdges(Node<T> node);
 
     Set<Node<T>> getNodes();
 
-    List<Edge<T>> getAllEdges();
+    Set<Edge<T>> getAllEdges();
+
+    boolean hasEdge(Node<T> firsNode, Node<T> secondNode);
+
 
 }

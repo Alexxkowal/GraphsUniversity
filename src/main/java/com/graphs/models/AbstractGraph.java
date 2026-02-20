@@ -7,7 +7,7 @@ import com.graphs.utils.TextGraphSerializer;
 import java.util.*;
 
 public abstract class AbstractGraph<T> implements Graph<T> {
-    protected Map<Node<T>, List<Edge<T>>> edges = new HashMap<>();
+    protected Map<Node<T>, Set<Edge<T>>> edges = new HashMap<>();
     protected boolean isWeighted = true;
 
     public AbstractGraph(boolean isWeighted) {
@@ -25,7 +25,7 @@ public abstract class AbstractGraph<T> implements Graph<T> {
     public AbstractGraph(Graph<T> graph) {
         this.isWeighted = graph.isWeighted();
         for (Node<T> node : graph.getNodes()) {
-            List<Edge<T>> edgeList = new ArrayList<>();
+            Set<Edge<T>> edgeList = new HashSet<>();
             for (Edge<T> edge : graph.getEdges(node)) {
                 edgeList.add(EdgeFactory.copy(edge));
             }
@@ -36,13 +36,13 @@ public abstract class AbstractGraph<T> implements Graph<T> {
 
     @Override
     public boolean addNode(Node<T> node) {
-        return edges.putIfAbsent(node, new ArrayList<>()) == null;
+        return edges.putIfAbsent(node, new HashSet<>()) == null;
     }
 
     @Override
     public boolean removeNode(Node<T> node) {
         if (edges.remove(node) == null) return false;
-        for (List<Edge<T>> list : edges.values()) {
+        for (Set<Edge<T>> list : edges.values()) {
             list.removeIf(e -> e.getEndNode().equals(node));
         }
         return true;
@@ -59,7 +59,7 @@ public abstract class AbstractGraph<T> implements Graph<T> {
     @Override
     public abstract void removeEdge(Node<T> firstNode, Node<T> secondNode);
 
-    public Map<Node<T>, List<Edge<T>>> getEdges() {
+    public Map<Node<T>, Set<Edge<T>>> getEdges() {
         return edges;
     }
 
@@ -67,7 +67,7 @@ public abstract class AbstractGraph<T> implements Graph<T> {
         return isWeighted;
     }
 
-    public List<Edge<T>> getEdges(Node<T> node) {
+    public Set<Edge<T>> getEdges(Node<T> node) {
         return edges.get(node);
     }
 
@@ -77,12 +77,12 @@ public abstract class AbstractGraph<T> implements Graph<T> {
         return edges.keySet();
     }
 
-    public List<Edge<T>> getAllEdges() {
+    public Set<Edge<T>> getAllEdges() {
         Set<Edge<T>> edgeSet = new HashSet<>();
-        for (List<Edge<T>> listEdges : edges.values()) {
+        for (Set<Edge<T>> listEdges : edges.values()) {
             edgeSet.addAll(listEdges);
         }
-        return new ArrayList<>(edgeSet);
+        return edgeSet;
     }
 
     @Override
@@ -93,10 +93,10 @@ public abstract class AbstractGraph<T> implements Graph<T> {
         AbstractGraph<?> graph = (AbstractGraph<?>) o;
         if (this.edges.size() != graph.getEdges().size()) return false;
         for (Node<T> node : this.getNodes()) {
-            List<Edge<T>> thisList = this.getEdges(node);
-            List<?> graphList = graph.getEdges((Node) node);
+            Set<Edge<T>> thisSet = this.getEdges(node);
+            Set<?> graphList = graph.getEdges((Node) node);
             if (graphList == null) return false;
-            if (!new HashSet<>(thisList).equals(new HashSet<>(graphList))) return false;
+            if (!thisSet.equals(new HashSet<>(graphList))) return false;
         }
         return true;
     }
@@ -104,9 +104,16 @@ public abstract class AbstractGraph<T> implements Graph<T> {
     @Override
     public int hashCode() {
         int result = 0;
-        for (Map.Entry<Node<T>, List<Edge<T>>> entry : edges.entrySet()) {
-            result += entry.getKey().hashCode() + new HashSet<>(entry.getValue()).hashCode();
+        for (Map.Entry<Node<T>, Set<Edge<T>>> entry : edges.entrySet()) {
+            result += entry.getKey().hashCode() + entry.getValue().hashCode();
         }
         return result;
     }
+
+    public boolean hasEdge(Node<T> start, Node<T> end) {
+        Set<Edge<T>> nodeEdges = edges.get(start);
+        if (nodeEdges == null) return false;
+        return nodeEdges.contains(EdgeFactory.createDirectedEdge(start, end, 0));
+    }
+
 }
