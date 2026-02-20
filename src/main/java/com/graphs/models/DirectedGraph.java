@@ -1,6 +1,9 @@
 package com.graphs.models;
 
+import com.graphs.models.edge.Edge;
 import com.graphs.models.edge.EdgeFactory;
+
+import java.util.List;
 
 public class DirectedGraph<T> extends AbstractGraph<T>{
     public DirectedGraph(boolean isWeighted) {
@@ -30,4 +33,5 @@ public class DirectedGraph<T> extends AbstractGraph<T>{
     public void removeEdge(Node<T> firstNode, Node<T> secondNode) {
         if (edges.containsKey(firstNode)) edges.get(firstNode).removeIf(e -> e.getEndNode().equals(secondNode));
     }
+
 }

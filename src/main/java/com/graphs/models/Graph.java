@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Set;
 
 public interface Graph<T> {
-    void addNode(Node<T> node);
+    boolean addNode(Node<T> node);
 
-    void removeNode(Node<T> node);
+    boolean removeNode(Node<T> node);
 
     void addEdge(Node<T> firstNode, Node<T> secondNode);
 
@@ -21,5 +21,7 @@ public interface Graph<T> {
     List<Edge<T>> getEdges(Node<T> node);
 
     Set<Node<T>> getNodes();
+
+    List<Edge<T>> getAllEdges();
 
 }
