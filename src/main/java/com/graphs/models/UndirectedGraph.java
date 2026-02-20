@@ -13,15 +13,15 @@ public class UndirectedGraph<T> extends AbstractGraph<T> {
         super(isWeighted);
     }
 
-    public UndirectedGraph(){
+    public UndirectedGraph() {
         super();
     }
 
-    public UndirectedGraph(String path){
+    public UndirectedGraph(String path) {
         super(path);
     }
 
-    public UndirectedGraph(Graph<T> graph){
+    public UndirectedGraph(Graph<T> graph) {
         super(graph);
     }
 
@@ -30,33 +30,36 @@ public class UndirectedGraph<T> extends AbstractGraph<T> {
         addNode(firstNode);
         addNode(secondNode);
         List<Edge<T>> edgeList = EdgeFactory.createUndirectedEdge(firstNode, secondNode, weight);
+        edges.get(firstNode).remove(edgeList.getFirst());
+        edges.get(secondNode).remove(edgeList.get(1));
         edges.get(firstNode).add(edgeList.getFirst());
         edges.get(secondNode).add(edgeList.get(1));
     }
 
 
-
     @Override
     public void removeEdge(Node<T> firstNode, Node<T> secondNode) {
-        if (edges.containsKey(firstNode) && edges.containsKey(secondNode)) {
-            edges.get(firstNode).removeIf(e -> e.getEndNode().equals(secondNode));
-            edges.get(secondNode).removeIf(e -> e.getEndNode().equals(firstNode));
-        } else {
-            throw new IllegalArgumentException("Nodes doesn't exists");
+        Set<Edge<T>> firstSet = edges.get(firstNode);
+        if (firstSet != null) {
+            firstSet.remove(EdgeFactory.createDirectedEdge(firstNode, secondNode, 0));
+        }
+        Set<Edge<T>> secondSet = edges.get(secondNode);
+        if (secondSet != null) {
+            secondSet.remove(EdgeFactory.createDirectedEdge(secondNode, firstNode, 0));
         }
     }
 
     @Override
-    public List<Edge<T>> getAllEdges() {
+    public Set<Edge<T>> getAllEdges() {
         Set<Edge<T>> edgeSet = new HashSet<>();
-        for (List<Edge<T>> listEdges : edges.values()) {
-            for (var edge : listEdges) {
+        for (Set<Edge<T>> setEdges : edges.values()) {
+            for (var edge : setEdges) {
                 if (edge.getStartNode().hashCode() > edge.getEndNode().hashCode()) {
                     continue;
                 }
                 edgeSet.add(edge);
             }
         }
-        return new ArrayList<>(edgeSet);
+        return edgeSet;
     }
 }
