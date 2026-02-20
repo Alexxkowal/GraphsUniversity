@@ -7,7 +7,7 @@ import java.util.Objects;
 public class Edge<T> {
     private final Node<T> startNode;
     private final Node<T> endNode;
-    private final int weight;
+    private int weight;
 
     Edge(Node<T> startNode, Node<T> endNode, int weight) {
         this.startNode = startNode;
@@ -29,16 +29,24 @@ public class Edge<T> {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) return false;
-        if (obj.getClass() != this.getClass()) return false;
         if (this == obj) return true;
-        Edge<T> edge = (Edge<T>) obj;
-        return (this.getStartNode().equals(edge.getStartNode()) && this.getEndNode().equals(edge.getEndNode())
-                && this.getWeight() == edge.getWeight());
-    }
+        if (!(obj instanceof Edge<?> edge)) return false;
+        return this.weight == edge.getWeight() &&
+           Objects.equals(this.startNode, edge.getStartNode()) &&
+           Objects.equals(this.endNode, edge.getEndNode());
+}
 
     @Override
     public int hashCode() {
         return Objects.hash(startNode, endNode, weight);
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
+    @Override
+    public String toString(){
+        return startNode + " " + endNode + " " + weight;
     }
 }

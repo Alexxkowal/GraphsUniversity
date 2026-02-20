@@ -19,23 +19,15 @@ public class TextGraphSerializer<T> implements GraphSerializer<T> {
             String graphType = graph.isWeighted() ? "weighted" : "unweighted";
             fileWriter.write(className + " " + graphType + System.lineSeparator());
             Set<Node<T>> nodeSet = new HashSet<>();
-            for (Node<T> node : graph.getNodes()) {
-                for (Edge<T> edge : graph.getEdges(node)) {
-                    String s;
-                    if (graph instanceof UndirectedGraph<T>) {
-                        if (edge.getStartNode().hashCode() > edge.getEndNode().hashCode()) {
-                            continue;
-                        }
-                    }
-                    if (graph.isWeighted()) {
-                        s = edge.getStartNode() + " " + edge.getEndNode() + " " + edge.getWeight() + System.lineSeparator();
-                    } else {
-                        s = edge.getStartNode() + " " + edge.getEndNode() + System.lineSeparator();
-                    }
-                    nodeSet.add(edge.getStartNode());
-                    nodeSet.add(edge.getEndNode());
-                    fileWriter.write(s);
+            for (var edge: graph.getAllEdges()){
+                if (graph.isWeighted()){
+                    fileWriter.write(edge.getStartNode() + " " + edge.getEndNode() + " " + edge.getWeight() + System.lineSeparator());
                 }
+                else{
+                    fileWriter.write(edge.getStartNode() + " " + edge.getEndNode() + System.lineSeparator());
+                }
+                nodeSet.add(edge.getStartNode());
+                nodeSet.add(edge.getEndNode());
             }
             Set<Node<T>> remainderNodes = new HashSet<>(graph.getNodes());
             remainderNodes.removeAll(nodeSet);

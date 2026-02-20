@@ -35,16 +35,17 @@ public abstract class AbstractGraph<T> implements Graph<T> {
     }
 
     @Override
-    public void addNode(Node<T> node) {
-        edges.putIfAbsent(node, new ArrayList<>());
+    public boolean addNode(Node<T> node) {
+        return edges.putIfAbsent(node, new ArrayList<>()) == null;
     }
 
     @Override
-    public void removeNode(Node<T> node) {
-        edges.remove(node);
+    public boolean removeNode(Node<T> node) {
+        if (edges.remove(node) == null) return false;
         for (List<Edge<T>> list : edges.values()) {
             list.removeIf(e -> e.getEndNode().equals(node));
         }
+        return true;
     }
 
     @Override
@@ -75,8 +76,6 @@ public abstract class AbstractGraph<T> implements Graph<T> {
     public Set<Node<T>> getNodes() {
         return edges.keySet();
     }
-
-    ;
 
     public List<Edge<T>> getAllEdges() {
         Set<Edge<T>> edgeSet = new HashSet<>();
