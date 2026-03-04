@@ -21,10 +21,11 @@ public class ConsoleInterface {
             System.out.println("Для выхода из программы введите 0");
             System.out.println("1 - Добавить вершину");
             System.out.println("2 - Удалить вершину");
-            System.out.println("3 - Добавить связь");
-            System.out.println("4 - Удалить связь");
-            System.out.println("5 - Показать все связи");
+            System.out.println("3 - Добавить ребро");
+            System.out.println("4 - Удалить ребро");
+            System.out.println("5 - Показать все ребра");
             System.out.println("6 - Показать все узлы");
+            System.out.println("7 - Показать список смежности");
 
             choose = scanner.nextLine().trim();
             switch (choose) {
@@ -45,9 +46,23 @@ public class ConsoleInterface {
                 case "6":
                     showAllNodes();
                     break;
+                case "7":
+                    showNodeNeighbors();
+                    break;
                 default:
                     System.out.println("Неправильный ввод, повторите попытку");
                     break;
+            }
+        }
+    }
+
+    private void showNodeNeighbors() {
+        String content;
+        System.out.println("Введите узел ");
+        content = scanner.nextLine().trim();
+        if (graph.hasNode(content)) {
+            for (Edge<String> edge: graph.getEdges(new Node<>(content))){
+                System.out.println(edge);
             }
         }
     }
@@ -92,10 +107,10 @@ public class ConsoleInterface {
             }
         }
         if (isDirected) {
-            System.out.println("Создан направленный граф, взвешенность: " + (isWeighted?"взвешенный":"невзвешенный"));
+            System.out.println("Создан направленный граф, взвешенность: " + (isWeighted ? "взвешенный" : "невзвешенный"));
             return new DirectedGraph<>(isWeighted);
         } else {
-            System.out.println("Создан ненаправленный граф, взвешенность: " + (isWeighted?"взвешенный":"невзвешенный"));
+            System.out.println("Создан ненаправленный граф, взвешенность: " + (isWeighted ? "взвешенный" : "невзвешенный"));
             return new UndirectedGraph<>(isWeighted);
         }
     }
@@ -172,12 +187,12 @@ public class ConsoleInterface {
                 }
             }
         }
-        if (graph.hasEdge(new Node<>(firstNodeContent), new Node<>(secondNodeContent))){
+        if (graph.hasEdge(new Node<>(firstNodeContent), new Node<>(secondNodeContent))) {
             String rewrite;
             System.out.println("Такая связь уже существует. Перезаписать?");
-            System.out.println("1 - да, другое - нет" );
+            System.out.println("1 - да, другое - нет");
             rewrite = scanner.nextLine();
-            switch (rewrite){
+            switch (rewrite) {
                 case "1":
                     System.out.println("Перезапись...");
                     break;
@@ -232,9 +247,9 @@ public class ConsoleInterface {
         }
     }
 
-    private void showAllNodes(){
+    private void showAllNodes() {
         System.out.println("Все узлы в графе: ");
-        for (var node: graph.getNodes()){
+        for (var node : graph.getNodes()) {
             System.out.println(node);
         }
     }
