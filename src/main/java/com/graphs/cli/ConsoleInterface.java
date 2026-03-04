@@ -25,7 +25,8 @@ public class ConsoleInterface {
             System.out.println("4 - Удалить ребро");
             System.out.println("5 - Показать все ребра");
             System.out.println("6 - Показать все узлы");
-            System.out.println("7 - Показать список смежности");
+            System.out.println("7 - Показать список смежности для узла");
+            System.out.println("8 - Показать список смежности ");
 
             choose = scanner.nextLine().trim();
             switch (choose) {
@@ -47,7 +48,10 @@ public class ConsoleInterface {
                     showAllNodes();
                     break;
                 case "7":
-                    showNodeNeighbors();
+                    showNodeAdjacencyList();
+                    break;
+                case "8":
+                    showAdjacencyList();
                     break;
                 default:
                     System.out.println("Неправильный ввод, повторите попытку");
@@ -56,15 +60,20 @@ public class ConsoleInterface {
         }
     }
 
-    private void showNodeNeighbors() {
+    private void showNodeAdjacencyList() {
         String content;
         System.out.println("Введите узел ");
         content = scanner.nextLine().trim();
         if (graph.hasNode(content)) {
-            for (Edge<String> edge: graph.getEdges(new Node<>(content))){
-                System.out.println(edge);
-            }
+            System.out.println(graph.getAdjacencyList(new Node<>(content)));
         }
+        else{
+            System.out.println("Такого узла нет");
+        }
+    }
+
+    private void showAdjacencyList(){
+        System.out.println(graph.toString());
     }
 
     private Graph<String> initialize() {

@@ -5,25 +5,17 @@ import java.util.List;
 import java.util.Objects;
 
 public class Node<T> {
-    private final List<Node<? extends T>> neighbors;
     private T content;
 
     public Node() {
-        neighbors = new ArrayList<>();
     }
 
     public Node(T content) {
         this.content = content;
-        neighbors = new ArrayList<>();
     }
 
     public Node(Node<? extends T> other) {
         this.content = other.getContent();
-        this.neighbors = new ArrayList<>(other.getNeighbors());
-    }
-
-    public List<Node<? extends T>> getNeighbors() {
-        return neighbors;
     }
 
     public T getContent() {

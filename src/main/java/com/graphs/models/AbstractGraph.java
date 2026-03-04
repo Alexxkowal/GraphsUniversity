@@ -68,7 +68,7 @@ public abstract class AbstractGraph<T> implements Graph<T> {
     }
 
     public Set<Edge<T>> getEdges(Node<T> node) {
-        return edges.get(node);
+        return edges.getOrDefault(node, Collections.emptySet());
     }
 
     ;
@@ -110,6 +110,7 @@ public abstract class AbstractGraph<T> implements Graph<T> {
         return result;
     }
 
+    @Override
     public boolean hasEdge(Node<T> start, Node<T> end) {
         Set<Edge<T>> nodeEdges = edges.get(start);
         if (nodeEdges == null) return false;
@@ -122,5 +123,31 @@ public abstract class AbstractGraph<T> implements Graph<T> {
             if (node.getContent().equals(content)) return true;
         };
         return false;
+    }
+
+    @Override
+    public String getAdjacencyList(Node<T> node){
+        StringJoiner sj = new StringJoiner(", ");
+        StringBuilder sb = new StringBuilder();
+        for (Edge<T> edge: getEdges(node)){
+            sb.append(edge.getEndNode());
+            if (!Double.isNaN(edge.getWeight())){
+                sb.append("(").append(edge.getWeight()).append(")");
+            }
+            sj.add(sb.toString());
+            sb.setLength(0);
+        }
+        return node.getContent() + "->" + sj;
+    }
+
+    @Override
+    public String toString(){
+        List<Node<T>> nodeList = new ArrayList<>(edges.keySet());
+        nodeList.sort(Comparator.comparing(Node::toString));
+        StringJoiner sj = new StringJoiner("\n");
+        for (Node<T> node: nodeList){
+            sj.add(getAdjacencyList(node));
+        }
+        return sj.toString();
     }
 }
