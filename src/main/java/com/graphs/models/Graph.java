@@ -3,6 +3,7 @@ package com.graphs.models;
 import com.graphs.models.edge.Edge;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 public interface Graph<T> {
@@ -26,5 +27,6 @@ public interface Graph<T> {
 
     boolean hasEdge(Node<T> firsNode, Node<T> secondNode);
 
+    boolean hasNode(T content);
 
 }

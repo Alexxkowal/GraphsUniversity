@@ -10,9 +10,9 @@ import java.util.Set;
 public class Edge<T> {
     private final Node<T> startNode;
     private final Node<T> endNode;
-    private int weight;
+    private double weight;
 
-    Edge(Node<T> startNode, Node<T> endNode, int weight) {
+    Edge(Node<T> startNode, Node<T> endNode, double weight) {
         this.startNode = startNode;
         this.endNode = endNode;
         this.weight = weight;
@@ -26,7 +26,7 @@ public class Edge<T> {
         return endNode;
     }
 
-    public int getWeight() {
+    public double getWeight() {
         return weight;
     }
 
@@ -46,21 +46,16 @@ public class Edge<T> {
         return Objects.hash(startNode, endNode);
     }
 
-    public void setWeight(int weight) {
+    public void setWeight(double weight) {
         this.weight = weight;
     }
 
     @Override
     public String toString() {
+        if (Double.isNaN(weight)){
+            return startNode + " " + endNode;
+        }
         return startNode + " " + endNode + " " + weight;
     }
 
-//    public boolean equalsNodeDirected(Edge<T> otherEdge){
-//        return this.startNode.equals(otherEdge.getStartNode()) && this.endNode.equals(otherEdge.getEndNode());
-//    }
-//
-//    public boolean equalsNodeUndirected(Edge<T> otherEdge){
-//        return (this.startNode.equals(otherEdge.getStartNode()) && this.endNode.equals(otherEdge.getEndNode()) ||
-//                this.startNode.equals(otherEdge.getEndNode()) && this.endNode.equals(otherEdge.getStartNode()));
-//    }
 }
