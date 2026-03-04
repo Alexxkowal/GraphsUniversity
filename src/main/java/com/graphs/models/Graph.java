@@ -29,4 +29,5 @@ public interface Graph<T> {
 
     boolean hasNode(T content);
 
+    String getAdjacencyList(Node<T> node);
 }
