@@ -7,17 +7,22 @@ import com.graphs.models.UndirectedGraph;
 import com.graphs.models.edge.Edge;
 import com.graphs.models.edge.EdgeFactory;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class ConsoleInterface {
     private Graph<String> graph;
     private final Scanner scanner = new Scanner(System.in);
+    Map<String, Graph<String>> graphs = new HashMap<>();
+    String currentGraphName;
 
     public void start() {
         System.out.println("Для выхода из программы введите 0");
         graph = initialize();
         String choose;
         while (true) {
+            System.out.printf("Текущий граф %s \n", currentGraphName);
             System.out.println("Для выхода из программы введите 0");
             System.out.println("1 - Добавить вершину");
             System.out.println("2 - Удалить вершину");
@@ -27,6 +32,8 @@ public class ConsoleInterface {
             System.out.println("6 - Показать все узлы");
             System.out.println("7 - Показать список смежности для узла");
             System.out.println("8 - Показать список смежности ");
+            System.out.println("9 - Создать новый граф");
+            System.out.println("10 - Переключить граф");
 
             choose = scanner.nextLine().trim();
             switch (choose) {
@@ -53,6 +60,12 @@ public class ConsoleInterface {
                 case "8":
                     showAdjacencyList();
                     break;
+                case "9":
+                    initialize();
+                    break;
+                case "10":
+                    changeGraph();
+                    break;
                 default:
                     System.out.println("Неправильный ввод, повторите попытку");
                     break;
@@ -66,23 +79,30 @@ public class ConsoleInterface {
         content = scanner.nextLine().trim();
         if (graph.hasNode(content)) {
             System.out.println(graph.getAdjacencyList(new Node<>(content)));
-        }
-        else{
+        } else {
             System.out.println("Такого узла нет");
         }
     }
 
-    private void showAdjacencyList(){
+    private void showAdjacencyList() {
         System.out.println(graph.toString());
     }
 
     private Graph<String> initialize() {
+        String graphName;
         String direct;
         String isWeightedInput;
+        Graph<String> createdGraph;
         boolean isWeighted = false;
         boolean isDirected = false;
         boolean firstChoose = false;
         boolean secondChoose = false;
+        System.out.println("Введите название графа: ");
+        graphName  = scanner.nextLine().trim();
+        while (graphs.containsKey(graphName) || graphName.isEmpty()){
+            System.out.println("Имя занято, введите другое");
+            graphName = scanner.nextLine().trim();
+        }
         while (!firstChoose) {
             System.out.println("Выберите взвешенность графа 1) Взешенный, 2) Невзвешенный");
             isWeightedInput = scanner.nextLine();
@@ -117,11 +137,14 @@ public class ConsoleInterface {
         }
         if (isDirected) {
             System.out.println("Создан направленный граф, взвешенность: " + (isWeighted ? "взвешенный" : "невзвешенный"));
-            return new DirectedGraph<>(isWeighted);
+            createdGraph = new DirectedGraph<>(isWeighted);
         } else {
             System.out.println("Создан ненаправленный граф, взвешенность: " + (isWeighted ? "взвешенный" : "невзвешенный"));
-            return new UndirectedGraph<>(isWeighted);
+            createdGraph = new UndirectedGraph<>(isWeighted);
         }
+        setCurrentGraphName(graphName);
+        graphs.put(graphName, createdGraph);
+        return createdGraph;
     }
 
     private void addNode() {
@@ -261,6 +284,34 @@ public class ConsoleInterface {
         for (var node : graph.getNodes()) {
             System.out.println(node);
         }
+    }
+    private void changeGraph(){
+        if (graphs.keySet().isEmpty()){
+            System.out.println("Нет доступных графов");
+            return;
+        }
+        System.out.println("Доступные графы");
+        for (String name: graphs.keySet()){
+            System.out.println(name);
+        }
+        System.out.println("Введите название графа для переключения или exit для выхода");
+        String name = scanner.nextLine().trim();
+        while (true) {
+            if (name.equals("exit")) {
+                return;
+            } else {
+                if (graphs.containsKey(name)) {
+                    graph = graphs.get(name);
+                    return;
+                } else {
+                    System.out.println("Такого графа не существует");
+                }
+            }
+            name = scanner.nextLine().trim();
+        }
+    }
+    private void setCurrentGraphName(String name){
+        currentGraphName = name;
     }
 }
 
