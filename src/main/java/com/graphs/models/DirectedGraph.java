@@ -30,7 +30,7 @@ public class DirectedGraph<T> extends AbstractGraph<T> {
     Поменял логику, теперь при добавлении связи будет меняться значение веса
      */
     @Override
-    public void addEdge(Node<T> firstNode, Node<T> secondNode, int weight) {
+    public void addEdge(Node<T> firstNode, Node<T> secondNode, double weight) {
         addNode(firstNode);
         addNode(secondNode);
         Edge<T> edge = EdgeFactory.createDirectedEdge(firstNode, secondNode, weight);
@@ -46,7 +46,7 @@ public class DirectedGraph<T> extends AbstractGraph<T> {
         }
     }
 
-    public Set<Node<T>> showIsolationNodes() {
+    public Set<Node<T>> getIsolationNodes() {
         HashSet<Node<T>> isolatedNodes = new HashSet<>(edges.keySet());
         for (Map.Entry<Node<T>, Set<Edge<T>>> entry : edges.entrySet()) {
             if (entry.getValue().isEmpty()) {
@@ -58,5 +58,18 @@ public class DirectedGraph<T> extends AbstractGraph<T> {
             }
         }
         return isolatedNodes;
+    }
+
+    public Set<Set<Node<T>>> getMutualNodes() {
+        HashSet<Set<Node<T>>> mutualNodes = new HashSet<>();
+        for (Map.Entry<Node<T>, Set<Edge<T>>> entry : edges.entrySet()) {
+            Node<T> node = entry.getKey();
+            for (Edge<T> edge : entry.getValue()) {
+                if (hasEdge(edge.getEndNode(), node)) {
+                    mutualNodes.add(new HashSet<>(List.of(node, edge.getEndNode())));
+                }
+            }
+        }
+        return mutualNodes;
     }
 }

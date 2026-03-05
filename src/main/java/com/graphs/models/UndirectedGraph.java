@@ -26,7 +26,7 @@ public class UndirectedGraph<T> extends AbstractGraph<T> {
     }
 
     @Override
-    public void addEdge(Node<T> firstNode, Node<T> secondNode, int weight) {
+    public void addEdge(Node<T> firstNode, Node<T> secondNode, double weight) {
         addNode(firstNode);
         addNode(secondNode);
         List<Edge<T>> edgeList = EdgeFactory.createUndirectedEdge(firstNode, secondNode, weight);
