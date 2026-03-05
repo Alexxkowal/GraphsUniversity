@@ -3,8 +3,11 @@ package com.graphs.models;
 import com.graphs.models.edge.Edge;
 import com.graphs.models.edge.EdgeFactory;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class DirectedGraph<T> extends AbstractGraph<T> {
     public DirectedGraph(boolean isWeighted) {
@@ -43,4 +46,17 @@ public class DirectedGraph<T> extends AbstractGraph<T> {
         }
     }
 
+    public Set<Node<T>> showIsolationNodes() {
+        HashSet<Node<T>> isolatedNodes = new HashSet<>(edges.keySet());
+        for (Map.Entry<Node<T>, Set<Edge<T>>> entry : edges.entrySet()) {
+            if (entry.getValue().isEmpty()) {
+                continue;
+            }
+            isolatedNodes.remove(entry.getKey());
+            for (Edge<T> edge : entry.getValue()) {
+                isolatedNodes.remove(edge.getEndNode());
+            }
+        }
+        return isolatedNodes;
+    }
 }
