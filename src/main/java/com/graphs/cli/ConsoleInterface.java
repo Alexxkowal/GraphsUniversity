@@ -7,9 +7,8 @@ import com.graphs.models.UndirectedGraph;
 import com.graphs.models.edge.Edge;
 import com.graphs.models.edge.EdgeFactory;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ConsoleInterface {
     private Graph<String> graph;
@@ -35,6 +34,7 @@ public class ConsoleInterface {
             System.out.println("9 - Создать новый граф");
             System.out.println("10 - Переключить граф");
             System.out.println("11 - Вывести все изолированные вершины орграфа (степени 0).");
+            System.out.println("12 - Вывести вершины, имеющие дугу друг в друга в орграфе");
 
             choose = scanner.nextLine().trim();
             switch (choose) {
@@ -72,6 +72,9 @@ public class ConsoleInterface {
                 case "11":
                     showIsolatedNodesInDirectedGraph();
                     break;
+                case "12":
+                    showMutualNodesInDirectedGraph();
+                    break;
                 default:
                     System.out.println("Неправильный ввод, повторите попытку");
                     break;
@@ -104,8 +107,8 @@ public class ConsoleInterface {
         boolean firstChoose = false;
         boolean secondChoose = false;
         System.out.println("Введите название графа: ");
-        graphName  = scanner.nextLine().trim();
-        while (graphs.containsKey(graphName) || graphName.isEmpty()){
+        graphName = scanner.nextLine().trim();
+        while (graphs.containsKey(graphName) || graphName.isEmpty()) {
             System.out.println("Имя занято, введите другое");
             graphName = scanner.nextLine().trim();
         }
@@ -291,13 +294,14 @@ public class ConsoleInterface {
             System.out.println(node);
         }
     }
-    private void changeGraph(){
-        if (graphs.keySet().isEmpty()){
+
+    private void changeGraph() {
+        if (graphs.keySet().isEmpty()) {
             System.out.println("Нет доступных графов");
             return;
         }
         System.out.println("Доступные графы");
-        for (String name: graphs.keySet()){
+        for (String name : graphs.keySet()) {
             System.out.println(name);
         }
         System.out.println("Введите название графа для переключения или exit для выхода");
@@ -316,18 +320,30 @@ public class ConsoleInterface {
             name = scanner.nextLine().trim();
         }
     }
-    private void setCurrentGraphName(String name){
+
+    private void setCurrentGraphName(String name) {
         currentGraphName = name;
     }
 
-    private void showIsolatedNodesInDirectedGraph(){
-        if (!(graph instanceof DirectedGraph<String>)){
+    private void showIsolatedNodesInDirectedGraph() {
+        if (!(graph instanceof DirectedGraph<String>)) {
             System.out.println("Граф не ориентированный");
             return;
-        }
-        else{
-            for(Node<String> node: ((DirectedGraph<String>) graph).showIsolationNodes()){
+        } else {
+            for (Node<String> node : ((DirectedGraph<String>) graph).getIsolationNodes()) {
                 System.out.println(node);
+            }
+        }
+    }
+
+    private void showMutualNodesInDirectedGraph() {
+        if (!(graph instanceof DirectedGraph<String>)) {
+            System.out.println("Граф не ориентированный");
+            return;
+        } else {
+            for (Set<Node<String>> set : ((DirectedGraph<String>) graph).getMutualNodes()){
+                String pairString = set.stream().map(Node::toString).collect(Collectors.joining("<->"));
+                System.out.println(pairString);
             }
         }
     }

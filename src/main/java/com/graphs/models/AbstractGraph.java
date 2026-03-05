@@ -50,11 +50,11 @@ public abstract class AbstractGraph<T> implements Graph<T> {
 
     @Override
     public void addEdge(Node<T> firstNode, Node<T> secondNode) {
-        this.addEdge(firstNode, secondNode, -1);
+        this.addEdge(firstNode, secondNode, Double.NaN);
     }
 
     @Override
-    public abstract void addEdge(Node<T> firstNode, Node<T> secondNode, int weight);
+    public abstract void addEdge(Node<T> firstNode, Node<T> secondNode, double weight);
 
     @Override
     public abstract void removeEdge(Node<T> firstNode, Node<T> secondNode);
@@ -114,7 +114,7 @@ public abstract class AbstractGraph<T> implements Graph<T> {
     public boolean hasEdge(Node<T> start, Node<T> end) {
         Set<Edge<T>> nodeEdges = edges.get(start);
         if (nodeEdges == null) return false;
-        return nodeEdges.contains(EdgeFactory.createDirectedEdge(start, end, 0));
+        return nodeEdges.contains(EdgeFactory.createDirectedEdge(start, end, Double.NaN));
     }
 
     @Override

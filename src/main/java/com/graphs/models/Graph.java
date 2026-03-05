@@ -13,7 +13,7 @@ public interface Graph<T> {
 
     void addEdge(Node<T> firstNode, Node<T> secondNode);
 
-    void addEdge(Node<T> firstNode, Node<T> secondNode, int weight);
+    void addEdge(Node<T> firstNode, Node<T> secondNode, double weight);
 
     void removeEdge(Node<T> firstNode, Node<T> secondNode);
 
@@ -30,4 +30,5 @@ public interface Graph<T> {
     boolean hasNode(T content);
 
     String getAdjacencyList(Node<T> node);
+
 }
