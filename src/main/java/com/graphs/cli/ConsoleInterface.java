@@ -34,9 +34,12 @@ public class ConsoleInterface {
             System.out.println("8 - Показать список смежности ");
             System.out.println("9 - Создать новый граф");
             System.out.println("10 - Переключить граф");
+            System.out.println("11 - Вывести все изолированные вершины орграфа (степени 0).");
 
             choose = scanner.nextLine().trim();
             switch (choose) {
+                case "0":
+                    System.exit(0);
                 case "1":
                     addNode();
                     break;
@@ -65,6 +68,9 @@ public class ConsoleInterface {
                     break;
                 case "10":
                     changeGraph();
+                    break;
+                case "11":
+                    showIsolatedNodesInDirectedGraph();
                     break;
                 default:
                     System.out.println("Неправильный ввод, повторите попытку");
@@ -312,6 +318,18 @@ public class ConsoleInterface {
     }
     private void setCurrentGraphName(String name){
         currentGraphName = name;
+    }
+
+    private void showIsolatedNodesInDirectedGraph(){
+        if (!(graph instanceof DirectedGraph<String>)){
+            System.out.println("Граф не ориентированный");
+            return;
+        }
+        else{
+            for(Node<String> node: ((DirectedGraph<String>) graph).showIsolationNodes()){
+                System.out.println(node);
+            }
+        }
     }
 }
 
