@@ -5,6 +5,7 @@ import com.graphs.models.edge.EdgeFactory;
 import com.graphs.utils.TextGraphSerializer;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public abstract class AbstractGraph<T> implements Graph<T> {
     protected Map<Node<T>, Set<Edge<T>>> edges = new HashMap<>();
@@ -149,5 +150,11 @@ public abstract class AbstractGraph<T> implements Graph<T> {
             sj.add(getAdjacencyList(node));
         }
         return sj.toString();
+    }
+
+    @Override
+    public Set<Node<T>> getSharedNeighbor(Node<T> u, Node<T> v) {
+        HashSet<Node<T>> uNodes = edges.getOrDefault(u, Collections.emptySet()).stream().map(Edge::getEndNode).collect(Collectors.toCollection(HashSet::new));
+        return edges.getOrDefault(v, Collections.emptySet()).stream().map(Edge::getEndNode).filter(uNodes::contains).collect(Collectors.toSet());
     }
 }

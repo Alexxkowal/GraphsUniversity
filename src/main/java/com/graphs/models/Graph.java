@@ -2,8 +2,6 @@ package com.graphs.models;
 
 import com.graphs.models.edge.Edge;
 
-import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 public interface Graph<T> {
@@ -31,4 +29,5 @@ public interface Graph<T> {
 
     String getAdjacencyList(Node<T> node);
 
+    Set<Node<T>> getSharedNeighbor(Node<T> u, Node<T> v);
 }

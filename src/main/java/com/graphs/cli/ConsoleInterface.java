@@ -35,7 +35,7 @@ public class ConsoleInterface {
             System.out.println("10 - Переключить граф");
             System.out.println("11 - Вывести все изолированные вершины орграфа (степени 0).");
             System.out.println("12 - Вывести вершины, имеющие дугу друг в друга в орграфе");
-
+            System.out.println("13 - Вывести общую вершину для двух узлов");
             choose = scanner.nextLine().trim();
             switch (choose) {
                 case "0":
@@ -74,6 +74,9 @@ public class ConsoleInterface {
                     break;
                 case "12":
                     showMutualNodesInDirectedGraph();
+                    break;
+                case "13":
+                    showSharedNeighbor();
                     break;
                 default:
                     System.out.println("Неправильный ввод, повторите попытку");
@@ -341,9 +344,34 @@ public class ConsoleInterface {
             System.out.println("Граф не ориентированный");
             return;
         } else {
-            for (Set<Node<String>> set : ((DirectedGraph<String>) graph).getMutualNodes()){
+            for (Set<Node<String>> set : ((DirectedGraph<String>) graph).getMutualNodes()) {
                 String pairString = set.stream().map(Node::toString).collect(Collectors.joining("<->"));
                 System.out.println(pairString);
+            }
+        }
+    }
+
+    private void showSharedNeighbor() {
+        System.out.println("Введите первую вершину");
+        String content1 = scanner.nextLine().trim();
+//        if (graph.hasNode(content1)) {
+//            System.out.println("Нет такого узла в графе");
+//            return;
+//        }
+        System.out.println("Введите вторую вершину");
+        String content2 = scanner.nextLine().trim();
+//        if (graph.hasNode(content2)) {
+//            System.out.println("Нет такого узла в графе");
+//            return;
+//        }
+        Set<Node<String>> result = graph.getSharedNeighbor(new Node<>(content1), new Node<>(content2));
+        if (result.isEmpty()){
+            System.out.println("Нет общей вершины");
+        }
+        else{
+            System.out.println("Общие вершины: ");
+            for (Node<String> node: result){
+                System.out.println(node);
             }
         }
     }
