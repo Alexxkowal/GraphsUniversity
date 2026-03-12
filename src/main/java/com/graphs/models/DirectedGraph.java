@@ -72,4 +72,5 @@ public class DirectedGraph<T> extends AbstractGraph<T> {
         }
         return mutualNodes;
     }
+
 }

@@ -37,6 +37,7 @@ public class ConsoleInterface {
             System.out.println("12 - Вывести вершины, имеющие дугу друг в друга в орграфе");
             System.out.println("13 - Вывести общую вершину для двух узлов");
             choose = scanner.nextLine().trim();
+
             switch (choose) {
                 case "0":
                     System.exit(0);

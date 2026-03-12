@@ -18,6 +18,7 @@ public class Node<T> {
         this.content = other.getContent();
     }
 
+
     public T getContent() {
         return content;
     }

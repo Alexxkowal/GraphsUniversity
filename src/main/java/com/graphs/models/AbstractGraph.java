@@ -152,6 +152,7 @@ public abstract class AbstractGraph<T> implements Graph<T> {
         return sj.toString();
     }
 
+
     @Override
     public Set<Node<T>> getSharedNeighbor(Node<T> u, Node<T> v) {
         HashSet<Node<T>> uNodes = edges.getOrDefault(u, Collections.emptySet()).stream().map(Edge::getEndNode).collect(Collectors.toCollection(HashSet::new));

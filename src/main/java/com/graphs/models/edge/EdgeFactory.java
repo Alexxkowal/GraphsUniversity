@@ -21,4 +21,5 @@ public class EdgeFactory<T>{
     public static <T> Edge<T> copy(Edge<T> original){
         return  new Edge<>(original.getStartNode(), original.getEndNode(), original.getWeight());
     }
+
 }

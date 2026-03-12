@@ -40,6 +40,7 @@ public class Edge<T> {
                         Objects.equals(this.endNode, edge.getEndNode());
     }
 
+
     // Добавлять вес??
     @Override
     public int hashCode() {

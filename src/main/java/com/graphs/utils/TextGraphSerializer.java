@@ -74,6 +74,7 @@ public class TextGraphSerializer<T> implements GraphSerializer<T> {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
     }
 }
 

@@ -49,6 +49,7 @@ public class UndirectedGraph<T> extends AbstractGraph<T> {
         }
     }
 
+
     @Override
     public Set<Edge<T>> getAllEdges() {
         Set<Edge<T>> edgeSet = new HashSet<>();
