@@ -158,4 +158,9 @@ public abstract class AbstractGraph<T> implements Graph<T> {
         HashSet<Node<T>> uNodes = edges.getOrDefault(u, Collections.emptySet()).stream().map(Edge::getEndNode).collect(Collectors.toCollection(HashSet::new));
         return edges.getOrDefault(v, Collections.emptySet()).stream().map(Edge::getEndNode).filter(uNodes::contains).collect(Collectors.toSet());
     }
+
+    @Override
+    public void setEdges(Map<Node<T>, Set<Edge<T>>> map) {
+        this.edges = new HashMap<>(map);
+    }
 }
