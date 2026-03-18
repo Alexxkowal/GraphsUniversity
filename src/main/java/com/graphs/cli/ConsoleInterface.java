@@ -4,8 +4,6 @@ import com.graphs.models.DirectedGraph;
 import com.graphs.models.Graph;
 import com.graphs.models.Node;
 import com.graphs.models.UndirectedGraph;
-import com.graphs.models.edge.Edge;
-import com.graphs.models.edge.EdgeFactory;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -36,6 +34,8 @@ public class ConsoleInterface {
             System.out.println("11 - Вывести все изолированные вершины орграфа (степени 0).");
             System.out.println("12 - Вывести вершины, имеющие дугу друг в друга в орграфе");
             System.out.println("13 - Вывести общую вершину для двух узлов");
+            System.out.println("14 - Создать граф пересечение");
+
             choose = scanner.nextLine().trim();
 
             switch (choose) {
@@ -65,7 +65,7 @@ public class ConsoleInterface {
                     showAdjacencyList();
                     break;
                 case "9":
-                    initialize();
+                    this.graph = initialize();
                     break;
                 case "10":
                     changeGraph();
@@ -78,6 +78,9 @@ public class ConsoleInterface {
                     break;
                 case "13":
                     showSharedNeighbor();
+                    break;
+                case "14":
+                    intersection();
                     break;
                 default:
                     System.out.println("Неправильный ввод, повторите попытку");
@@ -315,7 +318,8 @@ public class ConsoleInterface {
                 return;
             } else {
                 if (graphs.containsKey(name)) {
-                    graph = graphs.get(name);
+                    this.graph = graphs.get(name);
+                    this.currentGraphName = name;
                     return;
                 } else {
                     System.out.println("Такого графа не существует");
@@ -366,14 +370,33 @@ public class ConsoleInterface {
 //            return;
 //        }
         Set<Node<String>> result = graph.getSharedNeighbor(new Node<>(content1), new Node<>(content2));
-        if (result.isEmpty()){
+        if (result.isEmpty()) {
             System.out.println("Нет общей вершины");
-        }
-        else{
+        } else {
             System.out.println("Общие вершины: ");
-            for (Node<String> node: result){
+            for (Node<String> node : result) {
                 System.out.println(node);
             }
+        }
+    }
+
+    private void intersection() {
+        try {
+            System.out.println("Введите название первого графа");
+            Graph<String> first = graphs.get(scanner.nextLine().trim());
+            System.out.println("Введите название первого графа");
+            Graph<String> second = graphs.get(scanner.nextLine().trim());
+            Graph<String> result = Graph.graphIntersection(first, second);
+            System.out.println("Введите имя нового графа");
+            String name = scanner.nextLine().trim();
+            graphs.put(name, result);
+            System.out.println("Граф создан");
+
+
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Графы разных классов");
         }
     }
 }
