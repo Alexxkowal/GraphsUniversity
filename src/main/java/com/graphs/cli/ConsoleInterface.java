@@ -35,7 +35,7 @@ public class ConsoleInterface {
             System.out.println("12 - Вывести вершины, имеющие дугу друг в друга в орграфе");
             System.out.println("13 - Вывести общую вершину для двух узлов");
             System.out.println("14 - Создать граф пересечение");
-
+            System.out.println("15 - Количество путей из u в v");
             choose = scanner.nextLine().trim();
 
             switch (choose) {
@@ -82,6 +82,8 @@ public class ConsoleInterface {
                 case "14":
                     intersection();
                     break;
+                case "15":
+                    paths();
                 default:
                     System.out.println("Неправильный ввод, повторите попытку");
                     break;
@@ -398,6 +400,24 @@ public class ConsoleInterface {
         } catch (IllegalArgumentException e) {
             System.out.println("Графы разных классов");
         }
+    }
+    private void paths(){
+        System.out.println("Введите первый узел");
+        String startContent = scanner.nextLine().trim();
+        if (!graph.hasNode(startContent)){
+            System.out.println("Такого узла нет в графе");
+            return;
+        }
+        System.out.println("Введите второй узел");
+        String endContent = scanner.nextLine().trim();
+        if (!graph.hasNode(endContent)){
+            System.out.println("Такого узла нет в графе");
+            return;
+        }
+        Node<String> start = new Node<>(startContent);
+        Node<String> end = new Node<>(endContent);
+        int result = graph.countPaths(start, end);
+        System.out.println(result);
     }
 }
 
