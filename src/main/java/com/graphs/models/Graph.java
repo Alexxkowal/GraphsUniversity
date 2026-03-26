@@ -58,4 +58,6 @@ public interface Graph<T> {
             throw new NoSuchMethodException("Проверьте наличие пустого конструктора у графа");
         }
     }
+
+    int countPaths(Node<T> u, Node<T> v);
 }

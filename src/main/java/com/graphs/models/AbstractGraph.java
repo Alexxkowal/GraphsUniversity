@@ -163,4 +163,29 @@ public abstract class AbstractGraph<T> implements Graph<T> {
     public void setEdges(Map<Node<T>, Set<Edge<T>>> map) {
         this.edges = new HashMap<>(map);
     }
+
+    @Override
+    public int countPaths(Node<T> start, Node<T> end) {
+        Deque<Node<T>> deque = new ArrayDeque<>();
+        Set<Node<T>> visited = new HashSet<>();
+        return dfsCount(start, end, visited);
+    }
+
+    private int dfsCount(Node<T> current, Node<T> goal, Set<Node<T>> visited){
+        if (current.equals(goal)){
+            return 1;
+        }
+        visited.add(current);
+        int totalPaths = 0;
+        Set<Edge<T>> neighbors = edges.getOrDefault(current, Collections.emptySet());
+
+        for (Edge<T> edge: neighbors){
+            Node<T> neighbor = edge.getEndNode();
+            if (!visited.contains(neighbor)){
+                totalPaths += dfsCount(neighbor, goal, visited);
+            }
+        }
+        visited.remove(current);
+        return totalPaths;
+    }
 }
