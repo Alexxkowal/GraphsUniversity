@@ -3,11 +3,7 @@ package com.graphs.models;
 import com.graphs.models.edge.Edge;
 import com.graphs.models.edge.EdgeFactory;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
 public class DirectedGraph<T> extends AbstractGraph<T> {
     public DirectedGraph(boolean isWeighted) {
@@ -73,4 +69,40 @@ public class DirectedGraph<T> extends AbstractGraph<T> {
         return mutualNodes;
     }
 
+
+    public List<Node<T>> topologicalSort() {
+        LinkedList<Node<T>> stack = new LinkedList<>();
+        Set<Node<T>> visited = new HashSet<>();
+        Set<Node<T>> recursiveStack = new HashSet<>();
+        for (Node<T> node : getNodes()) {
+            if (!visited.contains(node)) {
+                if (!topoSortDFS(node, visited, recursiveStack, stack)) {
+                    throw new IllegalStateException("Граф содержит цикл! Топологическая сортировка невозможна.");
+                }
+            }
+        }
+        return stack;
+    }
+
+    private boolean topoSortDFS(Node<T> current, Set<Node<T>> visited,
+                                Set<Node<T>> recursiveStack, LinkedList<Node<T>> stack) {
+        if (recursiveStack.contains(current)) {
+            return false;
+        }
+        if (visited.contains(current)) {
+            return true;
+        }
+        visited.add(current);
+        recursiveStack.add(current);
+        Set<Edge<T>> neighbors = edges.getOrDefault(current, Collections.emptySet());
+        for (Edge<T> edge : neighbors) {
+            if (!topoSortDFS(edge.getEndNode(), visited, recursiveStack, stack)) {
+                return false;
+            }
+        }
+        recursiveStack.remove(current);
+        stack.addFirst(current);
+
+        return true;
+    }
 }

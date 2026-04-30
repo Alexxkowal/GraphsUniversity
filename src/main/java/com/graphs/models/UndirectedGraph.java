@@ -4,8 +4,11 @@ import com.graphs.models.edge.Edge;
 import com.graphs.models.edge.EdgeFactory;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.Set;
 
 public class UndirectedGraph<T> extends AbstractGraph<T> {
@@ -62,5 +65,32 @@ public class UndirectedGraph<T> extends AbstractGraph<T> {
             }
         }
         return edgeSet;
+    }
+
+    public List<Edge<T>> findMinimumSpanningTree() {
+        List<Edge<T>> mst = new ArrayList<>();
+        Set<Node<T>> visited = new HashSet<>();
+
+        PriorityQueue<Edge<T>> edgeQueue = new PriorityQueue<>(Comparator.comparingDouble(Edge::getWeight));
+        if (edges.isEmpty()) return mst;
+        Node<T> startNode = edges.keySet().iterator().next();
+        visit(startNode, visited, edgeQueue);
+        while (!edgeQueue.isEmpty() && visited.size() < edges.size()) {
+            Edge<T> edge = edgeQueue.poll();
+            Node<T> nextNode = edge.getEndNode();
+            if (visited.contains(nextNode)) continue;
+            mst.add(edge);
+            visit(nextNode, visited, edgeQueue);
+        }
+        return mst;
+    }
+
+    private void visit(Node<T> node, Set<Node<T>> visited, PriorityQueue<Edge<T>> queue) {
+        visited.add(node);
+        for (Edge<T> edge : edges.getOrDefault(node, Collections.emptySet())) {
+            if (!visited.contains(edge.getEndNode())) {
+                queue.add(edge);
+            }
+        }
     }
 }

@@ -4,6 +4,7 @@ import com.graphs.models.DirectedGraph;
 import com.graphs.models.Graph;
 import com.graphs.models.Node;
 import com.graphs.models.UndirectedGraph;
+import com.graphs.models.edge.Edge;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -36,6 +37,8 @@ public class ConsoleInterface {
             System.out.println("13 - Вывести общую вершину для двух узлов");
             System.out.println("14 - Создать граф пересечение");
             System.out.println("15 - Количество путей из u в v");
+            System.out.println("16 - топологическая сортировка");
+            System.out.println("17 - Кракас Прима");
             choose = scanner.nextLine().trim();
 
             switch (choose) {
@@ -84,10 +87,48 @@ public class ConsoleInterface {
                     break;
                 case "15":
                     paths();
+                case "16":
+                    topologicalSort();
+                case "17":
+                    carcas();
                 default:
                     System.out.println("Неправильный ввод, повторите попытку");
                     break;
             }
+        }
+    }
+
+    private void carcas() {
+        if (graph instanceof UndirectedGraph<String> undirectedGraph) {
+            var edges = undirectedGraph.findMinimumSpanningTree();
+            if (edges.isEmpty()) {
+                System.out.println("Граф пуст");
+            } else {
+                for (var e : edges) {
+                    System.out.println(e);
+                }
+            }
+        } else {
+            System.out.println("Граф направленный!!");
+        }
+    }
+
+    private void topologicalSort() {
+        try {
+            if (graph instanceof DirectedGraph<String> directedGraph) {
+                var sortedNodes = directedGraph.topologicalSort();
+                if (sortedNodes.isEmpty()) {
+                    System.out.println("Граф пуст.");
+                } else {
+                    for (Node<String> node : sortedNodes) {
+                        System.out.println(node);
+                    }
+                }
+            } else {
+                System.out.println("Граф ненаправленный, сортировка невозможна!");
+            }
+        } catch (IllegalStateException e) {
+            System.out.println("Ошибка " + e.getMessage());
         }
     }
 
@@ -401,16 +442,17 @@ public class ConsoleInterface {
             System.out.println("Графы разных классов");
         }
     }
-    private void paths(){
+
+    private void paths() {
         System.out.println("Введите первый узел");
         String startContent = scanner.nextLine().trim();
-        if (!graph.hasNode(startContent)){
+        if (!graph.hasNode(startContent)) {
             System.out.println("Такого узла нет в графе");
             return;
         }
         System.out.println("Введите второй узел");
         String endContent = scanner.nextLine().trim();
-        if (!graph.hasNode(endContent)){
+        if (!graph.hasNode(endContent)) {
             System.out.println("Такого узла нет в графе");
             return;
         }
